@@ -97,14 +97,57 @@ function rotate(matrix) {
     return newMatrix;
 }
 
+//Given a directed graph, design an algorithm to find out whether there is a
+//route between two nodes.
+function hasPath(sourceNode, destNode) {
+    if (sourceNode.value == destNode.value) {
+        return true;
+    }
+    if (!sourceNode.children) {
+        return false;
+    }
+    for (var i = 0; i < sourceNode.children.length; i++) {
+        if (hasPath(sourceNode.children[i], destNode)) {
+            return true;
+        }
+    }
+    return false;
+}
 $(document).ready(function () {
-    var matrix =
-        [[1, 2, 3, 4, 5, 6],
-        [2, 3, 4, 5, 6, 7],
-        [3, 4, 5, 6, 7, 8],
-        [4, 5, 6, 7, 8, 9],
-        [5, 6, 7, 8, 9, 10]];
-    console.log(matrix);
-    var newMatrix = rotate(matrix);
-    console.log(newMatrix);
+    var n0 = { value: 0 };
+    var n1 = { value: 1 };
+    var n2 = { value: 2 };
+    var n3 = { value: 3 };
+    var n4 = { value: 4 };
+    var n5 = { value: 5 };
+
+    n0.children = [n1,n4,n5];
+    n1.children = [n3, n4];
+    n2.children = [n1];
+    n3.children = [n2, n4];
+
+    var graph = [
+        n0,
+        n1,
+        n2,
+        n3,
+        n4,
+        n5,
+    ];
+    var findItemInGraph = function(value) {
+        for (var i = 0; i < graph.length; i++) {
+            if (graph[i].value == value) {
+                return graph[i];
+            }
+        }
+        return undefined;
+    }
+    var src = findItemInGraph(0);
+    var dst = findItemInGraph(3);
+    var connected = hasPath(src, dst) || hasPath(dst, src);
+    if (connected) {
+        console.log('yes');
+    } else {
+        console.log('no');
+    }
 });
