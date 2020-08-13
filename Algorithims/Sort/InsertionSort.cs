@@ -1,14 +1,13 @@
 ﻿namespace Algorithms.Sort
 {
-    public class InsertionSort : Sort.ISort
+    public class InsertionSort<T> : SortBase<T>, Sort.ISort<T>
     {
-        public InsertionSort(int[] array)
+        public InsertionSort(T[] array)
         {
             Array = array;
         }
 
-        public int[] Array { get; set; }
-        public void Sort()
+        public override void Sort()
         {
             for (int i = 1; i < Array.Length; i++)
             {
@@ -18,9 +17,9 @@
 
         private void Insert(int i)
         {
-            int valueAti = Array[i];
+            T valueAti = Array[i];
             int indexBeforei = i - 1;
-            while (indexBeforei >= 0 && Array[indexBeforei] > valueAti)
+            while (indexBeforei >= 0 && this.GreaterThan(Array[indexBeforei], valueAti))
             {
                 Array[indexBeforei + 1] = Array[indexBeforei];
                 indexBeforei--;

@@ -5,19 +5,18 @@ namespace Algorithms.Sort
     /// <summary>
     /// Main idea: split array by half, sort each half then merge all together
     /// </summary>
-    public class MergeSort : Sort.ISort
+    public class MergeSort<T> : SortBase<T>, Sort.ISort<T>
     {
-        public MergeSort(int[] array)
+        public MergeSort(T[] array)
         {
-            Array = array;
+            this.Array = array;
         }
 
-        public int[] Array { get; set; }
-        public void Sort()
+        public override void Sort()
         {
             // 0: left bound
             // Array.Length - 1: right bound
-            Sort(0, Array.Length-1);
+            Sort(0, Array.Length - 1);
         }
 
         private void Sort(int left, int right)
@@ -38,12 +37,12 @@ namespace Algorithms.Sort
         {
             int leftArraySize = middle - left + 1;
             int rightArraySize = right - middle;
-            List<int> tmpLeftArray = new List<int>();
+            List<T> tmpLeftArray = new List<T>();
             for (int i = 0; i < leftArraySize; i++)
             {
                 tmpLeftArray.Add(Array[left + i]);
             }
-            List<int> tmpRightArray = new List<int>();
+            List<T> tmpRightArray = new List<T>();
             for (int i = 0; i < rightArraySize; i++)
             {
                 tmpRightArray.Add(Array[middle + 1 + i]);
@@ -74,7 +73,7 @@ namespace Algorithms.Sort
                 }
 
                 // if the index still in range, do the compare one by one
-                if (tmpLeftArray[leftSubArrayIndex] < tmpRightArray[rightSubArrayIndex])
+                if (this.LessThan(tmpLeftArray[leftSubArrayIndex], tmpRightArray[rightSubArrayIndex]))
                 {
                     Array[currentSubArrayIndex] = tmpLeftArray[rightSubArrayIndex];
                     leftSubArrayIndex++;

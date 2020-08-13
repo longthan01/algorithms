@@ -42,17 +42,74 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CTCI\AVLTree.cs" />
+    <Compile Include="CTCI\BinarySearchTree.cs" />
+    <Compile Include="CTCI\DirectedGraph.cs" />
+    <Compile Include="CTCI\Ex5Helper.cs" />
+    <Compile Include="CTCI\ex_2_5.cs" />
+    <Compile Include="CTCI\ex_2_4.cs" />
+    <Compile Include="CTCI\ex_2_3.cs" />
+    <Compile Include="CTCI\ex_2_2.cs" />
+    <Compile Include="CTCI\ex_2_1.cs" />
+    <Compile Include="CTCI\ex_1_1.cs" />
+    <Compile Include="CTCI\ex_1_2.cs" />
+    <Compile Include="CTCI\ex_1_3.cs" />
+    <Compile Include="CTCI\ex_1_4.cs" />
+    <Compile Include="CTCI\ex_1_5.cs" />
+    <Compile Include="CTCI\ex_1_6.cs" />
+    <Compile Include="CTCI\ex_1_7.cs" />
+    <Compile Include="CTCI\ex_1_8.cs" />
+    <Compile Include="CTCI\ex_1_9.cs" />
+    <Compile Include="CTCI\ex_2_7.cs" />
+    <Compile Include="CTCI\ex_2_6.cs" />
+    <Compile Include="CTCI\ex_2_8.cs" />
+    <Compile Include="CTCI\ex_4_11.cs" />
+    <Compile Include="CTCI\ex_4_12.cs" />
+    <Compile Include="CTCI\ex_4_7.cs" />
+    <Compile Include="CTCI\ex_4_7_incomplete.cs" />
+    <Compile Include="CTCI\ex_4_8.cs" />
+    <Compile Include="CTCI\ex_4_10.cs" />
+    <Compile Include="CTCI\ex_4_9.cs" />
+    <Compile Include="CTCI\ex_5_2.cs" />
+    <Compile Include="CTCI\ex_5_1.cs" />
+    <Compile Include="CTCI\ex_5_3.cs" />
+    <Compile Include="CTCI\ex_5_6.cs" />
+    <Compile Include="CTCI\ex_5_7.cs" />
+    <Compile Include="CTCI\ex_sum_maximum_non_adjacent_elements.cs" />
+    <Compile Include="CTCI\ex_4_6.cs" />
+    <Compile Include="CTCI\ex_4_5.cs" />
+    <Compile Include="CTCI\ex_4_4.cs" />
+    <Compile Include="CTCI\ex_4_3.cs" />
+    <Compile Include="CTCI\ex_4_2.cs" />
+    <Compile Include="CTCI\ex_4_1.cs" />
+    <Compile Include="CTCI\ex_3_6.cs" />
+    <Compile Include="CTCI\ex_3_5.cs" />
+    <Compile Include="CTCI\ex_3_4.cs" />
+    <Compile Include="CTCI\ex_3_2.cs" />
+    <Compile Include="CTCI\ex_3_3.cs" />
+    <Compile Include="CTCI\OOODesigns\ex_7_1.cs" />
+    <Compile Include="CTCI\OOODesigns\ex_7_2.cs" />
+    <Compile Include="CTCI\OOODesigns\ex_7_3.cs" />
+    <Compile Include="CTCI\SingleLinkedList.cs" />
+    <Compile Include="CTCI\SortingAndSearching\ex_10_1.cs" />
+    <Compile Include="CTCI\SortingAndSearching\ex_10_2.cs" />
+    <Compile Include="CTCI\StackByLinkedList.cs" />
+    <Compile Include="CTCI\Tree.cs" />
     <Compile Include="Search\BinarySearch.cs" />
     <Compile Include="Search\ISearch.cs" />
+    <Compile Include="Sort\Comparer.cs" />
     <Compile Include="Sort\InsertionSort.cs" />
     <Compile Include="Sort\MergeSort.cs" />
     <Compile Include="Sort\HeapSort.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sort\Sort.cs" />
+    <Compile Include="Sort\Quicksort.cs" />
+    <Compile Include="Sort\ISort.cs" />
+    <Compile Include="Sort\SortBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
