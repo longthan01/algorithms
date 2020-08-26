@@ -45,6 +45,7 @@
     <Compile Include="CTCI\AVLTree.cs" />
     <Compile Include="CTCI\BinarySearchTree.cs" />
     <Compile Include="CTCI\DirectedGraph.cs" />
+    <Compile Include="CTCI\DynamicProgramming\ex_8_1.cs" />
     <Compile Include="CTCI\Ex5Helper.cs" />
     <Compile Include="CTCI\ex_2_5.cs" />
     <Compile Include="CTCI\ex_2_4.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="CTCI\ex_3_4.cs" />
     <Compile Include="CTCI\ex_3_2.cs" />
     <Compile Include="CTCI\ex_3_3.cs" />
+    <Compile Include="CTCI\Hard\ex_17_1.cs" />
     <Compile Include="CTCI\OOODesigns\ex_7_1.cs" />
     <Compile Include="CTCI\OOODesigns\ex_7_2.cs" />
     <Compile Include="CTCI\OOODesigns\ex_7_3.cs" />
@@ -95,6 +97,11 @@
     <Compile Include="CTCI\SortingAndSearching\ex_10_2.cs" />
     <Compile Include="CTCI\StackByLinkedList.cs" />
     <Compile Include="CTCI\Tree.cs" />
+    <Compile Include="DailyInterviewPro\AddNumberByLinkedList.cs" />
+    <Compile Include="DailyInterviewPro\FindFirstAndLastOccurencesOfATarget.cs" />
+    <Compile Include="DailyInterviewPro\FindLongestSubString.cs" />
+    <Compile Include="DailyInterviewPro\LongestPalindromeSubString.cs" />
+    <Compile Include="DailyInterviewPro\ValidateBalancedParentheses.cs" />
     <Compile Include="Search\BinarySearch.cs" />
     <Compile Include="Search\ISearch.cs" />
     <Compile Include="Sort\Comparer.cs" />

@@ -1,25 +1,137 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.CompilerServices;
+using System.Text;
+using System.Text.RegularExpressions;
 using Algorithms.CTCI;
 using Algorithms.CTCI.ex_4_7;
 using Algorithms.CTCI.OOODesigns.ex_7_2;
 using Algorithms.CTCI.SortingAndSearching;
+using Algorithms.DailyInterviewPro;
 using Algorithms.Search;
 using Algorithms.Sort;
 
 namespace Algorithms
 {
-    public class A
+    class Result
     {
-        public int test { get; set; }
-    }
 
+        /*
+         * Complete the 'getTotalGoals' function below.
+         *
+         * The function is expected to return an INTEGER.
+         * The function accepts following parameters:
+         *  1. STRING team
+         *  2. INTEGER year
+         */
+        public enum TeamType
+        {
+            Team1,
+            Team2
+        }
+        public static int getTotalGoals(string team, int year)
+        {
+            int count = 0;
+            int page = 1;
+            int totalPage = 0;
+            GetMatchDetailsPerPage(team, year, 1, TeamType.Team1, ref totalPage);
+            do
+            {
+                int c = GetMatchDetailsPerPage(team, year, page++, TeamType.Team1, ref totalPage);
+                count += c != -1 ? c : 0;
+            } while (page <= totalPage);
+            page = 1;
+            GetMatchDetailsPerPage(team, year, 1, TeamType.Team2, ref totalPage);
+            do
+            {
+                int c = GetMatchDetailsPerPage(team, year, page++, TeamType.Team2, ref totalPage);
+                count += c != -1 ? c : 0;
+            } while (page <= totalPage);
+            return count;
+        }
+        private static int ParseMatch(string json)
+        {
+            Regex competitionReg = new Regex(@"(?<=\[).*?(?=\])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            var compMatches = competitionReg.Matches(json);
+            var competition = compMatches[0].Groups[0].Value;
+            Regex matchReg = new Regex(@"(?<=\{).*?(?=\})", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            var mMatches = matchReg.Matches(competition);
+            int count = 0;
+            bool counted = false;
+            Regex team1goalsReg = new Regex(@"(""team1goals"":"")(\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            Regex team2goalsReg = new Regex(@"(""team2goals"":"")(\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            foreach (Match match in mMatches)
+            {
+                var obj = match.Groups[0].Value;
+                if (Regex.IsMatch(obj, $"\"team1\":\"Barcelona\""))
+                {
+                    counted = true;
+                    var team1Goals = team1goalsReg.Match(obj);
+                    count += int.Parse(team1Goals.Groups[2].Value);
+                }
+                else if (Regex.IsMatch(obj, $"\"team2\":\"Barcelona\""))
+                {
+                    counted = true;
+                    var team2Goals = team1goalsReg.Match(obj);
+                    count += int.Parse(team2Goals.Groups[2].Value);
+                }
+            }
+            return counted ? count : -1;
+        }
+        private static int GetMatchDetailsPerPage(string team, int year, int page, TeamType tt, ref int totalPages)
+        {
+            string tm = "";
+            switch (tt)
+            {
+                case TeamType.Team1:
+                    tm = "team1=" + team;
+                    break;
+                case TeamType.Team2:
+                    tm = "team2=" + team;
+                    break;
+            }
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create($"https://jsonmock.hackerrank.com/api/football_matches?year={year}&{tm}&page={page}");
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            using (Stream responseStream = response.GetResponseStream())
+            {
+                StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
+                string body = reader.ReadToEnd();
+                Regex totalPageReg = new Regex(@"(""total_pages"":)(\d+)");
+                totalPages = int.Parse(totalPageReg.Match(body).Groups[2].Value);
+                return ParseMatch(body);
+            }
+            return -1;
+        }
+    }
     class Program
     {
+        static int MySqrt(int x)
+        {
+            if (x == 0) return 0;
+            if (x == 1) return 1;
+            for (int i = 0; i <= x / 2; i++)
+            {
+                ulong ii = (ulong)i * (ulong)i;
+                ulong i1 = (ulong)(i + 1) * (ulong)(i + 1);
+                if (ii <= (ulong)x && i1 > (ulong)x)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
         static void Main(string[] args)
         {
+            int[] arr = new int[] { 23, 23,23,23,23,23,23,23,23,23,23,23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23 };
+            Console.WriteLine(arr.Length);
+            var ex = new FindFirstAndLastOccurencesOfATarget();
+            int[] res = ex.Solve(arr, 23);
+            Console.WriteLine(res[0]);
+            Console.WriteLine(res[1]);
             Console.ReadKey();
         }
         static void ex101()

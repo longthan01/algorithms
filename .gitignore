@@ -1,3 +1,6 @@
 .vs/
 Algorithims/bin/
 Algorithims/obj/
+packages/
+UnitTest/obj/
+UnitTest/bin/
