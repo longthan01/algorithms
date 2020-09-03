@@ -9,6 +9,9 @@ namespace Algorithms.CTCI
 {
     public class ex_5_2
     {
+        /// <summary>
+        /// convert floating point to binary
+        /// </summary>
         public string ToBinary(double number)
         {
             int n = (int)number;

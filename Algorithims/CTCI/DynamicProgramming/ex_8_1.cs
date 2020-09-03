@@ -8,6 +8,9 @@ namespace Algorithms.CTCI.DynamicProgramming
 {
    public class ex_8_1
     {
+        /// <summary>
+        /// count possible staircase steps
+        /// </summary>
         public int CountPossibleWays(int stairCaseSteps)
         {
             int first = 1;

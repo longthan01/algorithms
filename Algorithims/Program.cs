@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using Algorithms.CTCI;
@@ -17,6 +20,70 @@ using Algorithms.Sort;
 
 namespace Algorithms
 {
+    public class TwoMensionalArraySort
+    {
+        public int[][] DiagonalSort(int[][] mat)
+        {
+            if (mat.Length == 0)
+            {
+                return mat;
+            }
+            int row = mat.Length;
+            int col = mat[0].Length;
+            for (int i = 0; i < mat[0].Length; i++)
+            {
+                int higher = Math.Min(row, col - i);
+                SortInternal(mat, 0, i, 0, higher - 1);
+            }
+            for (int i = 0; i < mat.Length; i++)
+            {
+                int higher = Math.Min(row - i, col);
+                SortInternal(mat, i, 0, 0, higher - 1);
+            }
+            return mat;
+        }
+        private void SortInternal(int[][] arr, int row, int col, int lower, int higher)
+        {
+            if (lower >= higher)
+            {
+                return;
+            }
+
+            int partitionedIdx = this.Partition(arr, row, col, lower, higher);
+            this.SortInternal(arr, row, col, lower, partitionedIdx - 1);
+            this.SortInternal(arr, row, col, partitionedIdx, higher);
+
+        }
+        private int Partition(int[][] arr, int row, int col, int lower, int higher)
+        {
+            int pivot = (lower + higher) / 2;
+            int pivotElm = arr[row + pivot][col + pivot];
+            int leftIdx = lower;
+            int rightIdx = higher;
+            while (leftIdx <= rightIdx)
+            {
+                // find the index element that is higher than pivot
+
+                while (arr[row + leftIdx][col + leftIdx] < pivotElm) { leftIdx++; }
+                // find the index element that is lower than pivot
+                while (arr[row + rightIdx][col + rightIdx] > pivotElm) { rightIdx--; }
+                // check left and right valid
+                if (leftIdx <= rightIdx)
+                {
+                    Swap(arr, row, col, leftIdx, rightIdx);
+                    leftIdx++;
+                    rightIdx--;
+                }
+            }
+            return leftIdx;
+        }
+        private void Swap(int[][] arr, int row, int col, int i, int i1)
+        {
+            int tmp = arr[row + i][col + i];
+            arr[row + i][col + i] = arr[row + i1][col + i1];
+            arr[row + i1][col + i1] = tmp;
+        }
+    }
     class Result
     {
 
@@ -124,14 +191,217 @@ namespace Algorithms
             }
             return -1;
         }
+        public static int MinCostToMoveChips(int[] position)
+        {
+            int evenCost = 0;
+            int oddCost = 0;
+            for (int i = 0; i < position.Length; i++)
+            {
+                evenCost += position[i] % 2 == 0 ? 1 : 0;
+                oddCost += position[i] % 2 == 1 ? 1 : 0;
+            }
+            return evenCost > oddCost ? oddCost : evenCost;
+        }
+        static IList<int> FindDisappearedNumbers(int[] nums)
+        {
+            for (int i = 0; i < nums.Length; i++)
+            {
+                int t = Math.Abs(nums[i]);
+                int idx = t - 1;
+                if (nums[idx] > 0)
+                {
+                    nums[idx] = -nums[idx];
+                }
+            }
+            int v = 1;
+            List<int> res = new List<int>();
+            for (int i = 0; i < nums.Length; i++)
+            {
+                if (nums[i] > 0)
+                {
+                    res.Add(v);
+                }
+                v++;
+            }
+            return res;
+        }
+        static int IsPrefixOfWord(string sentence, string searchWord)
+        {
+            int index = 1;
+            int i = 0, j = 0;
+            while (i < sentence.Length)
+            {
+                if (searchWord[j] == sentence[i])
+                {
+                    if (j == searchWord.Length - 1)
+                    {
+                        return index;
+                    }
+                    else
+                    {
+                        i++;
+                        j++;
+                    }
+                }
+                else
+                {
+                    index++;
+                    j = 0;
+                    while (i < sentence.Length && sentence[i] != ' ') i++;
+                    i++;
+                }
+
+            }
+            return -1;
+        }
+        public static IList<IList<int>> ThreeSum(int[] nums)
+        {
+            List<IList<int>> res = new List<IList<int>>();
+            Hashtable tmp = new Hashtable();
+
+            for (int i = 0; i < nums.Length; i++)
+            {
+                Hashtable table = new Hashtable();
+
+                int remain = 0 - nums[i];
+                for (int j = i + 1; j < nums.Length; j++)
+                {
+                    if (!table.ContainsKey(nums[j]))
+                    {
+                        table.Add(remain - nums[j], 1);
+                    }
+                    else
+                    {
+                        List<int> triplet = new List<int>();
+                        triplet.Add(nums[i]);
+                        triplet.Add(remain - nums[j]);
+                        triplet.Add(nums[j]);
+                        var sortedLIst = new List<int>
+                        {
+                            nums[i], remain-nums[j], nums[j]
+                        };
+                        sortedLIst.Sort();
+                        string key = sortedLIst[0] + "_" + (sortedLIst[1]) + "_" + sortedLIst[2];
+                        if (!tmp.ContainsKey(key))
+                        {
+                            res.Add(triplet);
+                            tmp.Add(key, 1);
+                        }
+
+                    }
+                }
+
+            }
+            return res;
+        }
+        static int[] GetSimilaryWeight(Bitmap bm)
+        {
+            Hashtable ht = new Hashtable();
+            for (int i = 0; i < bm.Width; i++)
+            {
+                for (int j = 0; j < bm.Height; j++)
+                {
+                    int color = bm.GetPixel(i, j).ToArgb();
+                    if (ht.ContainsKey(color))
+                    {
+                        ht[color] = (int)ht[color] + 1;
+                    }
+                    else
+                    {
+                        ht[color] = 1;
+                    }
+                }
+            }
+            // find max
+            int max = -1;
+            int c = -1;
+            foreach (DictionaryEntry dictionaryEntry in ht)
+            {
+                int v = (int)dictionaryEntry.Value;
+                if (max < v)
+                {
+                    max = v;
+                    c = (int)dictionaryEntry.Key;
+                }
+            }
+            return new int[] { c, max };
+        }
+        static bool IsInRange(int[] prev, int[] current)
+        {
+            if (prev == null)
+            {
+                return true;
+            }
+            int COLOR_CONST = 10;
+            int MAX_CONST = 10;
+            bool colorInRange = prev[0] - COLOR_CONST <= current[0] && current[0] <= current[0] + COLOR_CONST;
+            bool maxInRange = prev[1] - MAX_CONST <= current[1] && current[1] <= current[1] + MAX_CONST;
+            return colorInRange && maxInRange;
+        }
+        static Bitmap Merges()
+        {
+            Hashtable ht = new Hashtable();
+            Bitmap bitmap = new Bitmap(1600, 1200);
+            int[] weightInfo = null;
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                for (int i = 0; i < 40; i++)
+                {
+                    for (int j = 0; j < 30; j++)
+                    {
+                        Image image1 = null;
+                        int num = -1;
+                        bool canFindSimilary = false;
+                        for (int k = 1; k <= 1200; k++)
+                        {
+                            if (ht.ContainsKey(k))
+                            { continue; }
+                            Image tmpImg = Image.FromFile($"images\\{k}.png");
+                            int[] wi = GetSimilaryWeight((Bitmap)tmpImg);
+                            if (IsInRange(weightInfo, wi))
+                            {
+                                image1 = tmpImg;
+                                weightInfo = wi;
+                                ht.Add(k, k);
+                                num = -1;
+                                canFindSimilary = true;
+                                Debug.WriteLine($"Picked {k}");
+                                break;
+                            }
+                            else
+                            {
+                                if (image1 == null)
+                                {
+                                    image1 = tmpImg;
+                                    num = k;
+                                }
+                            }
+                        }
+                        if(!canFindSimilary)
+                        {
+                            weightInfo = null;
+                        }
+                        if (num > 0 && !ht.ContainsKey(num))
+                        { ht.Add(num, num); }
+                        Debug.WriteLine($"Processed {i} - {j}: {num}");
+                        g.DrawImage(image1, 40 * i, 40 * j);
+                    }
+                }
+            }
+            return bitmap;
+        }
         static void Main(string[] args)
         {
-            int[] arr = new int[] { 23, 23,23,23,23,23,23,23,23,23,23,23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23 };
-            Console.WriteLine(arr.Length);
-            var ex = new FindFirstAndLastOccurencesOfATarget();
-            int[] res = ex.Solve(arr, 23);
-            Console.WriteLine(res[0]);
-            Console.WriteLine(res[1]);
+            if (!Directory.Exists("merged"))
+            {
+                Directory.CreateDirectory("merged");
+            }
+            for (int i = 0; i < 100; i++)
+            {
+                var bm = Merges();
+                Console.WriteLine($"Merged bitmap {i + 1}");
+                bm.Save($"merged\\{i + 1}.png");
+            }
             Console.ReadKey();
         }
         static void ex101()

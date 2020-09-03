@@ -34,6 +34,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -101,6 +102,7 @@
     <Compile Include="DailyInterviewPro\FindFirstAndLastOccurencesOfATarget.cs" />
     <Compile Include="DailyInterviewPro\FindLongestSubString.cs" />
     <Compile Include="DailyInterviewPro\LongestPalindromeSubString.cs" />
+    <Compile Include="DailyInterviewPro\NonDecreasingArrayWith1Modification.cs" />
     <Compile Include="DailyInterviewPro\ValidateBalancedParentheses.cs" />
     <Compile Include="Search\BinarySearch.cs" />
     <Compile Include="Search\ISearch.cs" />

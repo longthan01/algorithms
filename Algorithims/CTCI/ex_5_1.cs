@@ -9,6 +9,7 @@ namespace Algorithms.CTCI
 {
     public class ex_5_1
     {
+        // insert M to N 
         public int Insert(int N, int M, int j, int i)
         {
             int mask = 1 << (j + 1);
