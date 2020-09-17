@@ -103,6 +103,7 @@
     <Compile Include="DailyInterviewPro\FindLongestSubString.cs" />
     <Compile Include="DailyInterviewPro\LongestPalindromeSubString.cs" />
     <Compile Include="DailyInterviewPro\NonDecreasingArrayWith1Modification.cs" />
+    <Compile Include="DailyInterviewPro\PythagoreanTriplets.cs" />
     <Compile Include="DailyInterviewPro\ValidateBalancedParentheses.cs" />
     <Compile Include="Search\BinarySearch.cs" />
     <Compile Include="Search\ISearch.cs" />

@@ -377,7 +377,7 @@ namespace Algorithms
                                 }
                             }
                         }
-                        if(!canFindSimilary)
+                        if (!canFindSimilary)
                         {
                             weightInfo = null;
                         }
@@ -390,18 +390,241 @@ namespace Algorithms
             }
             return bitmap;
         }
+        static Hashtable BuildFreqTable(string S)
+        {
+            Hashtable htFreq = new Hashtable();
+            for (int i = 0; i < S.Length; i++)
+            {
+                if (!htFreq.ContainsKey(S[i]))
+                {
+                    htFreq.Add(S[i], new int[] { i, i });
+                }
+                else
+                {
+                    int[] val = (int[])htFreq[S[i]];
+                    val[1] = i;
+                    htFreq[S[i]] = val;
+                }
+            }
+            return htFreq;
+        }
+        static IList<int> PartitionLabels(string S)
+        {
+            if (String.IsNullOrEmpty(S))
+            {
+                return new List<int>();
+            }
+            List<int> res = new List<int>();
+            Hashtable htFreq = BuildFreqTable(S);
+            bool[] processed = new bool[26];
+            for (int i = 0; i < S.Length; i++)
+            {
+                int idx = S[i] - 97;
+                processed[idx] = false;
+            }
+            int unProcessedChars = htFreq.Keys.Count;
+            while (unProcessedChars > 0)
+            {
+                // find min
+                int minStart = 500;
+                int minEnd = -1;
+                char startIdx = (char)0;
+                foreach (DictionaryEntry de in htFreq)
+                {
+                    char c = (char)de.Key;
+                    if (processed[c - 97])
+                    {
+                        continue;
+                    }
+                    int[] idxs = (int[])de.Value;
+                    if (minStart > idxs[0])
+                    {
+                        minStart = idxs[0];
+                        minEnd = idxs[1];
+                        startIdx = c;
+                    }
+                }
+                processed[startIdx - 97] = true;
+                unProcessedChars--;
+                // find the new min end
+                foreach (DictionaryEntry de in htFreq)
+                {
+                    char c = (char)de.Key;
+                    if (processed[c - 97])
+                    {
+                        continue;
+                    }
+                    int[] idxs = (int[])de.Value;
+                    if (idxs[0] > minStart && idxs[0] < minEnd)
+                    {
+                        if (idxs[1] > minEnd)
+                        {
+                            minEnd = idxs[1];
+                        }
+                        processed[c - 97] = true;
+                        unProcessedChars--;
+                    }
+                }
+                // mark all char in range be processed
+                foreach (DictionaryEntry de in htFreq)
+                {
+                    char c = (char)de.Key;
+                    if (processed[c - 97])
+                    {
+                        continue;
+                    }
+                    int[] idxs = (int[])de.Value;
+                    if (idxs[0] > minStart && idxs[0] < minEnd)
+                    {
+                        if (idxs[1] > minEnd)
+                        {
+                            minEnd = idxs[1];
+                        }
+                        processed[c - 97] = true;
+                        unProcessedChars--;
+                    }
+                }
+                res.Add((minEnd - minStart) + 1);
+            }
+            return res;
+        }
+        static int[] Shuffle(int[] nums, int n)
+        {
+            int middle = n / 2;
+            int[] res = new int[n];
+            int i = 0, j = middle;
+            int it = 0;
+            while (it < n)
+            {
+                res[it++] = nums[i++];
+                res[it++] = nums[j++];
+            }
+            return res;
+        }
+        static int[] FindDiagonalOrder(IList<IList<int>> nums)
+        {
+            int maxCol = nums.Max(x => x.Count);
+            int n = nums.Sum(x => x.Count);
+
+            int[] res = new int[n];
+            int idx = 0;
+            for (int i = 0; i < nums.Count; i++)
+            {
+                int c = 0;
+                int r = i;
+
+                while (r >= 0)
+                {
+                    if (c < nums[r].Count)
+                    {
+                        res[idx++] = nums[r][c];
+
+                    }
+                    c++;
+                    r--;
+                }
+            }
+            int col = 1;
+            int row = nums.Count - 1;
+            while (row >= 0)
+            {
+                int r = row, c = col;
+                while (c < nums[r].Count)
+                {
+                    int c1 = c;
+                    int r1 = r;
+                    while (r1 >= 0)
+                    {
+                        if (c1 < nums[r1].Count)
+                        {
+                            res[idx++] = nums[r1][c1];
+                        }
+                        r1--;
+                        c1++;
+                    }
+                    c++;
+                }
+                col = Math.Max(c + 1, nums[row].Count + 1);
+                row--;
+            }
+            return res;
+        }
+        public static int NumIdenticalPairs(int[] nums)
+        {
+            Hashtable ht = new Hashtable();
+            for (int i = 0; i < nums.Length; i++)
+            {
+                if (!ht.ContainsKey(nums[i]))
+                {
+                    ht.Add(nums[i], 1);
+                }
+                else
+                {
+                    ht[nums[i]] = (int)ht[nums[i]] + 1;
+                }
+            }
+            int count = 0;
+            foreach (DictionaryEntry de in ht)
+            {
+                int c = (int)de.Value;
+                if (c > 1)
+                {
+                    count += Facial(c) / (2 * (Facial(c - 2)));
+                }
+            }
+            return count;
+        }
+        static int Facial(int x)
+        {
+            if (x == 0 || x == 1) return 1;
+            return x * Facial(x - 1);
+        }
+        static int solution(string S)
+        {
+            int vols = 0;
+            int conts = 0;
+            Hashtable htDistinctVols = new Hashtable();
+            Hashtable htDistinctConts = new Hashtable();
+            int distinctVols = 0;
+            int distinctConts = 0;
+            for (int i = 0; i < S.Length; i++)
+            {
+                if (S[i] == 'A' || S[i] == 'O' || S[i] == 'E' || S[i] == 'U' || S[i] == 'I')
+                {
+                    vols++;
+                    if (!htDistinctVols.ContainsKey(S[i]))
+                    {
+                        htDistinctVols.Add(S[i], 1);
+                        distinctVols++;
+                    }
+                }
+                else
+                {
+                    conts++;
+                    if (!htDistinctConts.ContainsKey(S[i]))
+                    {
+                        htDistinctConts.Add(S[i], 1);
+                        distinctConts++;
+                    }
+                }
+            }
+            if (vols > conts) { return 0; }
+            int v = Factorial(distinctVols);
+            decimal c = Factorial(distinctConts);
+            decimal res =  (c*v) % 1000000007;
+            return (int)res;
+        }
+        static int Factorial(int x)
+        {
+            if (x == 0 || x == 1) return 1;
+            long fx1 = Factorial(x - 1) % 1000000007;
+            long res = ((x % 1000000007) * fx1) % 1000000007;
+            return (int)res;
+        }
         static void Main(string[] args)
         {
-            if (!Directory.Exists("merged"))
-            {
-                Directory.CreateDirectory("merged");
-            }
-            for (int i = 0; i < 100; i++)
-            {
-                var bm = Merges();
-                Console.WriteLine($"Merged bitmap {i + 1}");
-                bm.Save($"merged\\{i + 1}.png");
-            }
+            
+            int res = solution("ABECODUFIGAHOJKELAMENOPIROSITA");
             Console.ReadKey();
         }
         static void ex101()
